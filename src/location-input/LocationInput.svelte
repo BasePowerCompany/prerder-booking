@@ -90,14 +90,29 @@
       );
     }
   };
+jQuery(document).on('click', ".input-address-container", function() {
+	jQuery(".focus_overlay").show();
+	jQuery(".input-address-container").addClass("focused");
+	jQuery("input.location-search-input").attr("placeholder", "Enter your address");
+	jQuery("button.submitAddressButton").hide();
+});
+jQuery(document).on('keydown', ".input-address-container", function() {
+  jQuery("input.location-search-input").attr("placeholder", "");
+});
+jQuery(document).on('click', ".focus_overlay", function() {
+	jQuery(".focus_overlay").hide();
+	jQuery(".submitAddressButton").show();
+  jQuery(".input-address-container").Class("focused");
+});
 </script>
 
-<div>
+<div class="input-address-wrap">
   <div class="input-address-container">
+    <img src="Base_files/map-pin.svg" alt="Map pin icon" />
     <GooglePlaceAutocomplete
       class="location-search-input"
       apiKey={googlePublicApiKey}
-      placeholder="Enter your address"
+      placeholder="See if your home qualifies"
       onSelect={(value) => {
         const parsed = parsePlaceResult(value);
         onAddressSelect?.(parsed);
@@ -110,19 +125,20 @@
         componentRestrictions: { country: "us" },
       }}
     />
-    <button
+  </div>
+  <button
       on:click={handleSubmit}
       class="submitAddressButton button secondary w-button"
     >
       {addressCtaText}
-    </button>
-  </div>
+  </button>
   {#if inputErrorMessage}
     <p class="preorder-address-error-message">
       {inputErrorMessage}
     </p>
   {/if}
 </div>
+<div class="focus_overlay"></div>
 
 <svelte:head>
   <script
@@ -133,20 +149,75 @@
 </svelte:head>
 
 <style lang="scss" global>
-  .submitAddressButton {
-    flex-shrink: 0;
-  }
   .input-address-container {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    padding: var(--Spacing-spacing-m, 8px);
+	  flex-direction: row;
+	  justify-content: center;
+	  align-items: flex-start;
+	  gap: var(--Spacing-spacing-m, 8px);
+	  align-self: stretch;
+    height: 66px;
+    background: #fff;
+	  border-radius: var(--Radius-radius-l, 12px);
+    position: relative;
+    z-index: 551;
     @media screen and (max-width: 768px) {
-      flex-direction: column;
       max-width: 400px;
       margin-left: auto;
       margin-right: auto;
+      height: 48px;
+      padding-top: 0px;
     }
   }
+  .input-address-container.focused {
+    /* Focus styles */
+    outline: 2px solid var(--Greyscale-20, #D2D4D4);
+  }
+  .input-address-container.focused:before {
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 12px;
+    border: 1px solid var(--Greyscale-90, #333E3F);
+}
+  .input-address-container img {
+    margin: 13px 0 9px 10px;
+    position: absolute;
+    left: 8px;
+  }
+  .submitAddressButton {
+	  display: flex;
+    flex-shrink: 0;
+	  width: 104px;
+	  height: 48px;
+	  flex-direction: column;
+	  justify-content: center;
+	  align-items: center;
+	  gap: var(--Spacing-spacing-m, 8px);
+	  border-radius: var(--Radius-radius-m, 8px);
+	  background: var(--Semantics-primary, #0C9953);
+	  color: var(--Semantics-onPrimary, #FFF);
+	  text-align: center;
+    position: absolute;
+    right: 9px;
+    margin-top: -56px;
+    z-index: 551;
+    @media screen and (max-width: 768px) {
+      position: relative;
+      width: 100%;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+
+	  /* label/label2 */
+	  font-size: 14px;
+	  font-weight: 500;
+}
 
   .preorder-address-error-message {
     color: #c95151;
@@ -154,15 +225,31 @@
     margin-top: 6px;
   }
   .location-search-input {
-    border: none;
-    background: #fafefff7;
-    border-radius: 12px;
+    position: absolute;
     height: 44px;
+    width: 100%;
+    border: none;
+    background: none;
+    border-radius: 12px;
     border: none !important;
     outline: none !important;
-    width: 100%;
-    padding: 0 16px;
-    line-height: 44px;
+	  /* body/body1 */
+	  font-size: 18px;
+	  font-weight: 400;
+	  line-height: 24px; /* 133.333% */
+    padding: 3px 16px 0 48px;    
+    @media screen and (max-width: 768px) {
+      font-size: 14px;
+    }
+    &.focused {
+      border-radius: 0 0 12px 12px;
+    }
+  }
+  .location-search-input::placeholder {
+    color: var(--Greyscale-60, #777E7F);
+  }
+  .location-search-input.input:focus {
+    box-shadow: none;
   }
 
   .hs-form__virality-link {
@@ -172,4 +259,47 @@
   #popup-form {
     transition: 0.2s all;
   }
+
+.signup_wrapper {
+  margin-bottom: 18px;
+  @media screen and (max-width: 768px) {
+    margin-bottom: 48px;
+  }
+}
+
+.signup_wrapper .paragraph.text-color-white.beta_text {
+	display: inline;
+  position: absolute;
+  left: 0;
+	gap: var(--Spacing-spacing-m, 8px);
+	border-radius: 4px;
+	background: rgba(28, 40, 41, 0.50);
+	color: var(--Primitives-White, #FFF);
+  padding: var(--Spacing-spacing-xs, 2px) var(--Spacing-spacing-m, 8px);
+  margin-top: 6px;
+
+	/* body/body2 */
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px; /* 142.857% */
+}
+
+.button.secondary {
+  color: var(--Semantics-onPrimary, #FFF);
+  background: var(--Semantics-primary, #0C9953);
+}
+.button.secondary:hover {
+  background: var(--Semantics-primary, #065c3f);
+}
+
+.focus_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(40, 51, 52, 0.5);
+  z-index: 50;
+  display: none;
+}
 </style>

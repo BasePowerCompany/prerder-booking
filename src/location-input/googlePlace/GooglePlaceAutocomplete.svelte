@@ -125,11 +125,8 @@
 
 <style lang="scss" global>
   .autocomplete-container {
-    width: 100%;
     position: relative;
-    font-family:
-      PP Neue Montreal Variable,
-      sans-serif;
+    font-family: PP Neue Montreal Variable,Arial,sans-serif;
   }
   .result-list {
     background: white;
@@ -140,30 +137,50 @@
     width: 100%;
     left: 0;
   }
-  .location-search-input {
-    border: none;
-    background: rgba(250, 254, 255, 0.97);
-    border-radius: 12px;
-    height: 44px;
-    border: none !important;
-    outline: none !important;
-    &.focused {
-      border-radius: 0 0 12px 12px;
-    }
-  }
-
   .pac-container {
     border-radius: 12px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: 1px solid var(--Greyscale-90, #333E3F);
+    border-top: none;
+    box-shadow: 0 2px 0 2px var(--Greyscale-20, #D2D4D4);
+    padding-top: 16px;
+    @media screen and (max-width: 768px) {
+      margin-top: -6px;
+    }
 
-    .pac-item {
+    .pac-container .pac-item:first-of-type {
+      border-top: red 1px;
+    }
+
+    .pac-item, .pac-item .pac-item-query {
+      color: var(--Greyscale-95, #283334);
+      border: none;
+
+      /* body/body1 */
+      font-family: PP Neue Montreal Variable,Arial,sans-serif;
+      font-size: 12px;
+      font-style: normal;
+      font-style: normal;
+      font-style: normal;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 24px; /* 133.333% */
+      
       padding: 0 16px;
       line-height: 44px;
-      font-family:
-        PP Neue Montreal Variable,
-        sans-serif;
+    }
+    .pac-item .pac-item-query {
+      font-weight: 600;
+      font-size: 130%;
     }
     &:after {
       display: none !important;
+    }
+    .pac-item:hover,
+    .pac-item:hover .pac-item-query {
+      color: var(--Semantics-secondary, #084D41);
+      background: rgba(236, 250, 208, 0.25);
     }
   }
 
