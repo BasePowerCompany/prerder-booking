@@ -290,7 +290,9 @@
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
-  left: 0;
+  @media screen and (max-width: 768px) {
+    left: 0;
+  }
 }
 .button.secondary:hover {
   background: var(--Semantics-primary, #065c3f);
