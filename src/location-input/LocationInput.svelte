@@ -120,6 +120,7 @@
         inputErrorMessage = "";
 
         selectedAddress = parsed;
+        handleSubmit();
       }}
       options={{
         componentRestrictions: { country: "us" },
