@@ -20,6 +20,20 @@
 
   onMount(async () => {
     loadZips();
+    jQuery(".input-address-container").on('click', function() {
+      jQuery(".focus_overlay").show();
+	    jQuery(".input-address-container").addClass("focused");
+	    jQuery("input.location-search-input").attr("placeholder", "Enter your address");
+	    jQuery("button.submitAddressButton").hide();
+    });
+    jQuery(".input-address-container").on('keydown', function() {
+      jQuery("input.location-search-input").attr("placeholder", "");
+    });
+	  jQuery(".focus_overlay").on('click', function() {
+      jQuery(".focus_overlay").hide();
+	    jQuery(".submitAddressButton").show();
+      jQuery(".input-address-container").removeClass("focused");
+    });
   });
 
   export let panelEl: HTMLDivElement;
@@ -90,20 +104,6 @@
       );
     }
   };
-jQuery(document).on('click', ".input-address-container", function() {
-	jQuery(".focus_overlay").show();
-	jQuery(".input-address-container").addClass("focused");
-	jQuery("input.location-search-input").attr("placeholder", "Enter your address");
-	jQuery("button.submitAddressButton").hide();
-});
-jQuery(document).on('keydown', ".input-address-container", function() {
-  jQuery("input.location-search-input").attr("placeholder", "");
-});
-jQuery(document).on('click', ".focus_overlay", function() {
-	jQuery(".focus_overlay").hide();
-	jQuery(".submitAddressButton").show();
-  jQuery(".input-address-container").Class("focused");
-});
 </script>
 
 <div class="input-address-wrap">
