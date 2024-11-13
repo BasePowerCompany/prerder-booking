@@ -287,6 +287,10 @@
 .button.secondary {
   color: var(--Semantics-onPrimary, #FFF);
   background: var(--Semantics-primary, #0C9953);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
 }
 .button.secondary:hover {
   background: var(--Semantics-primary, #065c3f);
