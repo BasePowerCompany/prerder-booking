@@ -108,7 +108,7 @@
 
 <div class="input-address-wrap">
   <div class="input-address-container">
-    <img src="Base_files/map-pin.svg" alt="Map pin icon" />
+    <img src="https://cdn.jsdelivr.net/gh/BasePowerCompany/preorder-booking@1.0.1/public/Base_files/map-pin.svg" alt="Map pin icon" />
     <GooglePlaceAutocomplete
       class="location-search-input"
       apiKey={googlePublicApiKey}
