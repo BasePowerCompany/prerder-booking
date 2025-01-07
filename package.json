@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "build": "rollup -c rollup.config.all.js",
-    "build:embed": "npm run build",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
     "check": "svelte-check --tsconfig ./tsconfig.json"
