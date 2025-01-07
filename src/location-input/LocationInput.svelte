@@ -194,7 +194,6 @@
   .submitAddressButton {
     display: flex;
     flex-shrink: 0;
-    width: 104px;
     height: 48px;
     flex-direction: column;
     justify-content: center;

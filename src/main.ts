@@ -12,9 +12,8 @@ PreorderApp.initialize({
   targetStateContainer: "#popup-form .form-box_holder",
   targetAvailableText: `#preorder-availability`,
   targetDisplayAddress: `#service-address`,
-
   querySelectorClickToOpenForm: '[data-preorder="open"]',
-
+  addressCtaText: config.addressButtonText || "Get Started",
   // stripe
   googleSheetConfig: {
     zipsCsvUrl:

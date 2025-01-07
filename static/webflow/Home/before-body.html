@@ -115,6 +115,8 @@
   posthog.onFeatureFlags(function () {
     var redirectToSignupForm =
       posthog.getFeatureFlag("redirect-to-signup-form-v2-debug") === "test";
+    var changeAddressCtaText =
+      posthog.getFeatureFlag("address-cta") === "test";
     BasePreorderApp.initialize({
       targetElsAddressInput: [
         document.getElementById("address-form"),
@@ -166,6 +168,7 @@
         }
       },
       hidePanelEl: redirectToSignupForm,
+      addressCtaText: changeAddressCtaText ? "Check Availability" : "Get Started",
       onAddressSubmitSuccess: (addressData, leadType, zipConfig) => {
         gtag("event", "address-submit", { leadType, addressData, zipConfig });
         window.hubspotAddressData = addressData;
