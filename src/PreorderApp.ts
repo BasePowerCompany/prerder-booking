@@ -60,7 +60,7 @@ export const PreorderApp = {
         window.scrollTo({ top: y, behavior: "smooth" });
 
         setTimeout(() => {
-          targetElAddressInput.querySelector("input").focus();
+          targetElAddressInput.querySelector("input").click();
         }, 1000);
       });
     });

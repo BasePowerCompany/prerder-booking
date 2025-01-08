@@ -4,7 +4,7 @@ PreorderApp.initialize({
   targetElAddressInput: document.getElementById(
     "hero-address-entry",
   ) as HTMLDivElement,
-  googlePublicApiKey: "AIzaSyB0o_nPI-xjHYKg7KB0bl87Yhnf2ng9Nsg",
+  googlePublicApiKey: "AIzaSyAmQVT2CAy_KGQ1uutPJ2DPf93TcaxboS4",
   targetPanel: "#popup-form",
   targetAddressPanel: "#address-popup",
   targetAvailableState: "#preorder-base",
