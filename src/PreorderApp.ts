@@ -47,7 +47,8 @@ export const PreorderApp = {
 
     // open form button actions
     document.querySelectorAll(querySelectorClickToOpenForm).forEach((el) => {
-      el.addEventListener("click", () => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
         targetElAddressInput.scrollIntoView({
           behavior: "smooth",
         });
