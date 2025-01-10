@@ -20,22 +20,27 @@
 
   onMount(async () => {
     loadZips();
-    jQuery(".input-address-container").on("click", function () {
-      jQuery(".focus_overlay").show();
-      jQuery(".input-address-container").addClass("focused");
-      jQuery("input.location-search-input").attr(
-        "placeholder",
-        "Enter your address",
-      );
-      jQuery("button.submitAddressButton").hide();
+    const addButtons = document.querySelectorAll(".get-started");
+	  const addressEntry = document.querySelector("#hero-address-entry");
+	  const addInput = document.querySelector(".location-search-input");
+	  const addOverlay = document.querySelector(".focus_overlay");
+	  const addContainer = document.querySelector(".input-address-container");
+  
+	  addButtons.forEach(addButton => {
+		  addButton.addEventListener("click"￼, function() {
+	  		addressEntry.classList.add("focused");
+	  		addInput.placeholder = 'Enter your address';
+	  	};
+  	});
+    //jQuery(".get-started").on("click", function () {
+    //  addressEntry.classList.add("focused");
+    //  addInput.placeholder = 'Enter your address';
+    //});
+    addContainer.addEventListener("keydown", function() {
+      addInput.placeholder = '';
     });
-    jQuery(".input-address-container").on("keydown", function () {
-      jQuery("input.location-search-input").attr("placeholder", "");
-    });
-    jQuery(".focus_overlay").on("click", function () {
-      jQuery(".focus_overlay").hide();
-      jQuery(".submitAddressButton").show();
-      jQuery(".input-address-container").removeClass("focused");
+    addOverlay.addEventListener("click", function() {
+      addressEntry.classList.remove("focused");
     });
   });
 
@@ -117,7 +122,7 @@
 </script>
 
 <div class="input-address-wrap">
-  <div class="input-address-container">
+  <div class="input-address-container get-started">
     <img
       src="https://cdn.jsdelivr.net/gh/BasePowerCompany/preorder-booking@1.0.1/public/Base_files/map-pin.svg"
       alt="Map pin icon"
@@ -140,9 +145,9 @@
       }}
     />
   </div>
-  <button class="submitAddressButton button secondary w-button">
+  <a data-preorder="open" href="#" class="submitAddressButton button secondary w-button get-started">
     {addressCtaText}
-  </button>
+  </a>
   {#if inputErrorMessage}
     <p class="preorder-address-error-message">
       {inputErrorMessage}
@@ -180,21 +185,6 @@
       height: 48px;
       padding-top: 0px;
     }
-  }
-  .input-address-container.focused {
-    /* Focus styles */
-    outline: 2px solid var(--Greyscale-20, #d2d4d4);
-  }
-  .input-address-container.focused:before {
-    content: " ";
-    position: absolute;
-    z-index: -1;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    border-radius: 12px;
-    border: 1px solid var(--Greyscale-90, #333e3f);
   }
   .input-address-container img {
     margin: 13px 0 9px 10px;
@@ -314,5 +304,28 @@
     background: rgba(40, 51, 52, 0.5);
     z-index: 50;
     display: none;
+  }
+  /* Focus styles */
+  .input-address-container.focused,
+  #hero-address-entry.focused .input-address-container {
+    outline: 2px solid var(--Greyscale-20, #d2d4d4);
+  }
+  #hero-address-entry.focused .focus_overlay {
+		display: block;
+	}
+	#hero-address-entry.focused .submitAddressButton {
+		display: none;
+	}
+  .input-address-container.focused:before,
+  #hero-address-entry.focused .input-address-container:before {
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 12px;
+    border: 1px solid var(--Greyscale-90, #333e3f);
   }
 </style>
