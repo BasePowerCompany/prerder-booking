@@ -61,7 +61,7 @@ export const PreorderApp = {
 
         setTimeout(() => {
           targetElAddressInput.querySelector("input").click();
-        }, 1000);
+        }, 500);
       });
     });
 

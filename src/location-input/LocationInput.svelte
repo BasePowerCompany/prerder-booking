@@ -20,18 +20,27 @@
 
   onMount(async () => {
     loadZips();
-    jQuery(".get-started").on("click", function () {
-      jQuery("#hero-address-entry").addClass("focused");
-      jQuery("input.location-search-input").attr(
-        "placeholder",
-        "Enter your address",
-      );
+    const addButtons = document.querySelectorAll(".get-started");
+	  const addressEntry = document.querySelector("#hero-address-entry");
+	  const addInput = document.querySelector(".location-search-input");
+	  const addOverlay = document.querySelector(".focus_overlay");
+	  const addContainer = document.querySelector(".input-address-container");
+  
+	  addButtons.forEach(addButton => {
+		  addButton.addEventListener("click"￼, function() {
+	  		addressEntry.classList.add("focused");
+	  		addInput.placeholder = 'Enter your address';
+	  	};
+  	});
+    //jQuery(".get-started").on("click", function () {
+    //  addressEntry.classList.add("focused");
+    //  addInput.placeholder = 'Enter your address';
+    //});
+    addContainer.addEventListener("keydown", function() {
+      addInput.placeholder = '';
     });
-    jQuery(".input-address-container").on("keydown", function () {
-      jQuery("input.location-search-input").attr("placeholder", "");
-    });
-    jQuery(".focus_overlay").on("click", function () {
-      jQuery("#hero-address-entry").removeClass("focused");
+    addOverlay.addEventListener("click", function() {
+      addressEntry.classList.remove("focused");
     });
   });
 
