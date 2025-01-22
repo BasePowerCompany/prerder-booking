@@ -20,7 +20,8 @@
 
   onMount(async () => {
     loadZips();
-    const addButtons = document.querySelectorAll(".get-started");
+    //const addButtons = document.querySelectorAll(".get-started");
+    const addButtons = document.querySelectorAll("[data-preorder='open']");
 	  const addressEntry = document.querySelector("#hero-address-entry");
 	  const addInput = document.querySelector(".location-search-input");
 	  const addOverlay = document.querySelector(".focus_overlay");
@@ -117,7 +118,7 @@
   };
 </script>
 
-<div class="input-address-wrap get-started">
+<div class="input-address-wrap get-started" data-preorder="open">
   <div class="input-address-container">
     <img
       src="https://cdn.jsdelivr.net/gh/BasePowerCompany/preorder-booking@1.0.1/public/Base_files/map-pin.svg"
