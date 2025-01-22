@@ -27,10 +27,10 @@
 	  const addContainer = document.querySelector(".input-address-container");
   
 	  addButtons.forEach(addButton => {
-		  addButton.addEventListener("click"￼, function() {
+		  addButton.addEventListener("click", function() {
 	  		addressEntry.classList.add("focused");
 	  		addInput.placeholder = 'Enter your address';
-	  	};
+	  	});
   	});
     addContainer.addEventListener("keydown", function() {
     	addInput.placeholder = '';
