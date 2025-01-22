@@ -117,7 +117,7 @@
   };
 </script>
 
-<div class="input-address-wrap">
+<div class="input-address-wrap get-started">
   <div class="input-address-container">
     <img
       src="https://cdn.jsdelivr.net/gh/BasePowerCompany/preorder-booking@1.0.1/public/Base_files/map-pin.svg"
@@ -141,7 +141,7 @@
       }}
     />
   </div>
-  <button class="submitAddressButton button secondary w-button">
+  <button class="submitAddressButton button secondary w-button get-started">
     {addressCtaText}
   </button>
   {#if inputErrorMessage}
@@ -312,7 +312,7 @@
 	#hero-address-entry.focused .submitAddressButton {
 		display: none;
 	}
-  .input-address-container.focused:before {
+  .focused .input-address-container:before {
     content: " ";
     position: absolute;
     z-index: -1;
@@ -320,7 +320,7 @@
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 12px;
     border: 1px solid var(--Greyscale-90, #333e3f);
+    border-radius: 12px;
   }
 </style>
