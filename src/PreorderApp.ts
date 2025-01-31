@@ -1,96 +1,48 @@
 import type { PreorderAppConfig } from "./Config.types";
 import { initializeHubspotForms } from "./initializeForms";
 import LocationInput from "./location-input/LocationInput.svelte";
-import { fadeOut } from "./visibilityUtils";
+import type { ParsedPlaceResult } from "./location-input/googlePlace/utils";
 
 export const PreorderApp = {
   initialize: (props: PreorderAppConfig) => {
     const {
-      targetElAddressInput = document.getElementById("hero-address-entry"),
+      targetElAddressInput,
       googlePublicApiKey,
-      targetPanel,
-      targetAddressPanel,
-      targetAvailableState,
-      targetNotAvailableState,
-      targetStateContainer,
-      targetAvailableText,
-      targetDisplayAddress,
       googleSheetConfig,
       hsFormSuccess,
       hsFormNewsletter,
       querySelectorClickToOpenForm,
       onAddressSelect,
       onAddressSubmitSuccess,
-      hidePanelEl,
-      addressCtaText,
     } = props;
 
+    // Initialize HubSpot forms
     initializeHubspotForms({
       hsFormSuccess,
       hsFormNewsletter,
     });
 
-    const panelEl = document.querySelector(targetPanel) as HTMLDivElement;
-    const stateContainerEl = document.querySelector(
-      targetStateContainer,
-    ) as HTMLDivElement;
-
-    const addressPanelEl = document.querySelector(
-      targetAddressPanel,
-    ) as HTMLDivElement;
-    const targetAvailableStateEl = document.querySelector(
-      targetAvailableState,
-    ) as HTMLDivElement;
-    const targetNotAvailableStateEl = document.querySelector(
-      targetNotAvailableState,
-    ) as HTMLDivElement;
-
-    // open form button actions
+    // Ensure "Check Availability" buttons work
     document.querySelectorAll(querySelectorClickToOpenForm).forEach((el) => {
       el.addEventListener("click", (e) => {
         e.preventDefault();
-        targetElAddressInput.scrollIntoView({
-          behavior: "smooth",
-        });
-
-        const y =
-          targetElAddressInput.getBoundingClientRect().top +
-          window.scrollY -
-          300;
-
-        window.scrollTo({ top: y, behavior: "smooth" });
+        targetElAddressInput.scrollIntoView({ behavior: "smooth" });
 
         setTimeout(() => {
-          targetElAddressInput.querySelector("input").focus();
+          const input = targetElAddressInput.querySelector("input");
+          if (input) input.focus();
         }, 1000);
       });
     });
 
-    /**
-     * close button
-     */
-    document.querySelectorAll(".close-button").forEach((el) => {
-      el.addEventListener("click", () => {
-        fadeOut(panelEl);
-      });
-    });
-
+    // Initialize address input component
     const locationInput = new LocationInput({
       target: targetElAddressInput,
       props: {
         googlePublicApiKey,
         googleSheetConfig,
-        targetAvailableText,
-        targetDisplayAddress,
-        addressPanelEl,
-        targetAvailableStateEl,
-        stateContainerEl,
-        panelEl,
-        targetNotAvailableStateEl,
         onAddressSelect,
         onAddressSubmitSuccess,
-        hidePanelEl,
-        addressCtaText,
       },
     });
 

@@ -1,47 +1,29 @@
 import type { ParsedPlaceResult } from "./location-input/googlePlace/utils";
-import type {
-  SheetDataConfig,
-  StoredZipDataItem,
-} from "./location-input/zipData/types";
+import type { StoredZipDataItem } from "./location-input/zipData/types";
 
 export type HubspotFormConfig = {
   target: string;
   region: string;
   portalId: string;
   formId: string;
-  onFormSubmit?: any;
-  onFormSubmitted?: (
-    form: HTMLFormElement,
-    args: {
-      submissionValues: Record<string, string> & {
-        selectedAddress?: ParsedPlaceResult;
-        zipConfig?: StoredZipDataItem;
-      };
-      redirectUrl: string | null;
-    },
-  ) => void;
+  onFormSubmit?: () => void;
 };
 
 export type PreorderAppConfig = {
   targetElAddressInput: HTMLDivElement;
   googlePublicApiKey: string;
-  targetPanel: string;
-  targetAddressPanel: string;
-  targetAvailableState: string;
-  targetNotAvailableState: string;
-  targetStateContainer: string;
-  targetAvailableText: string;
-  targetDisplayAddress: string;
+  googleSheetConfig: {
+    zipsCsvUrl: string;
+  };
   querySelectorClickToOpenForm: string;
-  googleSheetConfig: SheetDataConfig;
   hsFormSuccess: HubspotFormConfig;
   hsFormNewsletter: HubspotFormConfig;
   onAddressSelect?: (data: ParsedPlaceResult) => void;
   onAddressSubmitSuccess?: (
-    data: ParsedPlaceResult,
-    type: string,
-  ) => void | undefined;
-  hidePanelEl?: boolean;
-  addressCtaText?: string;
+    addressData: ParsedPlaceResult,
+    formType: 'lead-preorder-form' | 'lead-newsletter-form',
+    zipConfig: StoredZipDataItem | null
+  ) => void;
 };
+
 export type SubmitFormDescription = { label: string; value: string }[];

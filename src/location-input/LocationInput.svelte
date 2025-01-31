@@ -1,118 +1,66 @@
 <script lang="ts">
   import GooglePlaceAutocomplete from "./googlePlace/GooglePlaceAutocomplete.svelte";
   import { ParsedPlaceResult, parsePlaceResult } from "./googlePlace/utils";
-  import { setHiddenHubspotInputs } from "./hubspot/hsFormUtils";
-  import { displayBlock, displayNone, fadeIn } from "../visibilityUtils";
   import { onMount } from "svelte";
   import { getZipStore } from "./zipData/zipStore";
   import type { SheetDataConfig, StoredZipDataItem } from "./zipData/types";
   import type { OnAddressSubmitSuccess } from "../types";
-  import { hsFormStateBooking } from "../windowVars";
-
-  export let targetAvailableText: string;
-  export let targetDisplayAddress: string;
 
   export let googlePublicApiKey: string;
   export let googleSheetConfig: SheetDataConfig;
   export let addressCtaText: string = "Get started";
+  export let onAddressSelect: (data: ParsedPlaceResult) => void | undefined;
+  export let onAddressSubmitSuccess: OnAddressSubmitSuccess = () => {};
 
   const { store: zipStore, load: loadZips } = getZipStore(googleSheetConfig);
 
   onMount(async () => {
     loadZips();
-    jQuery(".input-address-container").on("click", function () {
-      jQuery(".focus_overlay").show();
-      jQuery(".input-address-container").addClass("focused");
-      jQuery("input.location-search-input").attr(
-        "placeholder",
-        "Enter your address",
-      );
-      jQuery("button.submitAddressButton").hide();
+    const inputContainer = document.querySelector('.input-address-container');
+    const focusOverlay = document.querySelector('.focus_overlay');
+    const searchInput = document.querySelector('input.location-search-input');
+    const submitButton = document.querySelector('button.submitAddressButton');
+
+    inputContainer?.addEventListener('click', () => {
+      focusOverlay?.classList.add('show');
+      inputContainer.classList.add('focused');
+      if (searchInput instanceof HTMLInputElement) {
+        searchInput.placeholder = "Enter your address";
+      }
+      submitButton?.classList.add('hide');
     });
-    jQuery(".input-address-container").on("keydown", function () {
-      jQuery("input.location-search-input").attr("placeholder", "");
+
+    inputContainer?.addEventListener('keydown', () => {
+      if (searchInput instanceof HTMLInputElement) {
+        searchInput.placeholder = "";
+      }
     });
-    jQuery(".focus_overlay").on("click", function () {
-      jQuery(".focus_overlay").hide();
-      jQuery(".submitAddressButton").show();
-      jQuery(".input-address-container").removeClass("focused");
+
+    focusOverlay?.addEventListener('click', () => {
+      focusOverlay.classList.remove('show');
+      submitButton?.classList.remove('hide');
+      inputContainer?.classList.remove('focused');
     });
   });
-
-  export let panelEl: HTMLDivElement;
-  export let stateContainerEl: HTMLDivElement;
-  export let addressPanelEl: HTMLDivElement;
-  export let targetAvailableStateEl: HTMLDivElement;
-  export let targetNotAvailableStateEl: HTMLDivElement;
-  export let onAddressSelect: (data: ParsedPlaceResult) => void | undefined;
-  export let onAddressSubmitSuccess: OnAddressSubmitSuccess = () => {};
-  export let hidePanelEl: boolean = false;
 
   $: inputErrorMessage = "";
   let selectedAddress: ParsedPlaceResult | undefined;
   $: selectedAddress = undefined;
 
   const handleSubmit = () => {
-    if (!selectedAddress) {
-      inputErrorMessage = "Please enter a full address.";
-      return;
-    }
-    if (
-      !selectedAddress.postalCode ||
-      !selectedAddress.houseNumber ||
-      !selectedAddress.street
-    ) {
+    if (!selectedAddress?.postalCode || !selectedAddress?.houseNumber || !selectedAddress?.street) {
       inputErrorMessage = "Please enter a full address.";
       return;
     }
 
-    if (!hidePanelEl) {
-      fadeIn(panelEl);
-    }
-    displayBlock(stateContainerEl);
-    displayNone(addressPanelEl);
-
-    const targetDisplayAddressEl = document.querySelector(targetDisplayAddress);
-    targetDisplayAddressEl.innerHTML = selectedAddress.formattedAddress;
     const foundZipItem: StoredZipDataItem | null =
-      $zipStore.find((zipItem) => {
-        return zipItem.zip === selectedAddress.postalCode;
-      }) || null;
+      $zipStore.find((zipItem) => zipItem.zip === selectedAddress.postalCode) || null;
 
-    if (foundZipItem) {
-      document.querySelector(targetAvailableText).innerHTML =
-        foundZipItem.availability;
-
-      displayBlock(targetAvailableStateEl);
-      displayNone(targetNotAvailableStateEl);
-      setHiddenHubspotInputs(
-        window.hsFormPreorder,
-        selectedAddress,
-        foundZipItem,
-      );
-      hsFormStateBooking.update({
-        selectedAddress,
-        zipConfig: foundZipItem,
-      });
-      onAddressSubmitSuccess?.(
-        selectedAddress,
-        "lead-preorder-form",
-        foundZipItem,
-      );
-    } else {
-      displayBlock(targetNotAvailableStateEl);
-      displayNone(targetAvailableStateEl);
-      setHiddenHubspotInputs(window.hsFormNewsletter, selectedAddress);
-      hsFormStateBooking.update({
-        selectedAddress,
-        zipConfig: null,
-      });
-      onAddressSubmitSuccess?.(
-        selectedAddress,
-        "lead-newsletter-form",
-        foundZipItem,
-      );
-    }
+    onAddressSubmitSuccess?.(
+      selectedAddress,
+      foundZipItem ? 'lead-preorder-form' : 'lead-newsletter-form',
+      foundZipItem
+    );
   };
 </script>
 
@@ -129,9 +77,7 @@
       onSelect={(value) => {
         const parsed = parsePlaceResult(value);
         onAddressSelect?.(parsed);
-        window.blur();
         inputErrorMessage = "";
-
         selectedAddress = parsed;
         handleSubmit();
       }}
@@ -151,28 +97,32 @@
 </div>
 <div class="focus_overlay"></div>
 
-<svelte:head>
-  <script
-    charset="utf-8"
-    type="text/javascript"
-    src="//js-eu1.hsforms.net/forms/embed/v2.js"
-  ></script>
-</svelte:head>
+<style lang="scss">
+  .input-address-wrap {
+    position: relative;
+  }
 
-<style lang="scss" global>
   .input-address-container {
     display: flex;
-    padding: var(--Spacing-spacing-m, 8px);
-    flex-direction: row;
-    justify-content: center;
+    padding: 8px;
     align-items: flex-start;
-    gap: var(--Spacing-spacing-m, 8px);
-    align-self: stretch;
+    gap: 8px;
     height: 66px;
     background: #fff;
-    border-radius: var(--Radius-radius-l, 12px);
+    border-radius: 12px;
     position: relative;
     z-index: 551;
+    
+    &.focused {
+      outline: 2px solid #d2d4d4;
+    }
+    
+    img {
+      margin: 13px 0 9px 10px;
+      position: absolute;
+      left: 8px;
+    }
+
     @media screen and (max-width: 768px) {
       max-width: 400px;
       margin-left: auto;
@@ -181,59 +131,7 @@
       padding-top: 0px;
     }
   }
-  .input-address-container.focused {
-    /* Focus styles */
-    outline: 2px solid var(--Greyscale-20, #d2d4d4);
-  }
-  .input-address-container.focused:before {
-    content: " ";
-    position: absolute;
-    z-index: -1;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    border-radius: 12px;
-    border: 1px solid var(--Greyscale-90, #333e3f);
-  }
-  .input-address-container img {
-    margin: 13px 0 9px 10px;
-    position: absolute;
-    left: 8px;
-  }
-  .submitAddressButton {
-    display: flex;
-    flex-shrink: 0;
-    height: 48px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--Spacing-spacing-m, 8px);
-    border-radius: var(--Radius-radius-m, 8px);
-    background: var(--Semantics-primary, #0c9953);
-    color: var(--Semantics-onPrimary, #fff);
-    text-align: center;
-    position: absolute;
-    right: 9px;
-    margin-top: -56px;
-    z-index: 551;
-    @media screen and (max-width: 768px) {
-      position: relative;
-      width: 100%;
-      margin-top: 10px;
-      margin-left: 10px;
-    }
 
-    /* label/label2 */
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .preorder-address-error-message {
-    color: #c95151;
-    font-size: 14px;
-    margin-top: 6px;
-  }
   .location-search-input {
     position: absolute;
     height: 44px;
@@ -241,68 +139,44 @@
     border: none;
     background: none;
     border-radius: 12px;
-    border: none !important;
-    outline: none !important;
-    /* body/body1 */
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px; /* 133.333% */
     padding: 3px 16px 0 48px;
-    &.focused {
-      border-radius: 0 0 12px 12px;
-    }
-  }
-  .location-search-input::placeholder {
-    color: var(--Greyscale-60, #777e7f);
-  }
-  .location-search-input.input:focus {
-    box-shadow: none;
-  }
-
-  .hs-form__virality-link {
-    display: none !important;
-  }
-
-  #popup-form {
-    transition: 0.2s all;
-  }
-
-  .signup_wrapper {
-    margin-bottom: 18px;
-    @media screen and (max-width: 768px) {
-      margin-bottom: 48px;
+    font-size: 18px;
+    line-height: 24px;
+    
+    &::placeholder {
+      color: #777e7f;
     }
   }
 
-  .signup_wrapper .paragraph.text-color-white.beta_text {
-    display: inline;
-    position: absolute;
-    left: 0;
-    gap: var(--Spacing-spacing-m, 8px);
-    border-radius: 4px;
-    background: rgba(28, 40, 41, 0.5);
-    color: var(--Primitives-White, #fff);
-    padding: var(--Spacing-spacing-xs, 2px) var(--Spacing-spacing-m, 8px);
-    margin-top: 6px;
-
-    /* body/body2 */
+  .submitAddressButton {
+    display: flex;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #0c9953;
+    color: #fff;
     font-size: 14px;
-    font-weight: 400;
-    line-height: 20px; /* 142.857% */
-  }
-
-  .button.secondary {
-    color: var(--Semantics-onPrimary, #fff);
-    background: var(--Semantics-primary, #0c9953);
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    @media screen and (max-width: 768px) {
-      left: 0;
+    font-weight: 500;
+    position: absolute;
+    right: 9px;
+    margin-top: -56px;
+    z-index: 551;
+    
+    &:hover {
+      background: #065c3f;
     }
-  }
-  .button.secondary:hover {
-    background: var(--Semantics-primary, #065c3f);
+
+    &.hide {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      position: relative;
+      width: 100%;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
   }
 
   .focus_overlay {
@@ -314,5 +188,15 @@
     background: rgba(40, 51, 52, 0.5);
     z-index: 50;
     display: none;
+    
+    &.show {
+      display: block;
+    }
+  }
+
+  .preorder-address-error-message {
+    color: #c95151;
+    font-size: 14px;
+    margin-top: 6px;
   }
 </style>
