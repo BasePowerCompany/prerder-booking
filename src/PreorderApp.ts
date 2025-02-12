@@ -16,8 +16,8 @@ export const PreorderApp = {
       targetAvailableText,
       targetDisplayAddress,
       googleSheetConfig,
-      hsFormSuccess,
-      hsFormNewsletter,
+      // hsFormSuccess,
+      // hsFormNewsletter,
       querySelectorClickToOpenForm,
       onAddressSelect,
       onAddressSubmitSuccess,
@@ -25,10 +25,10 @@ export const PreorderApp = {
       addressCtaText,
     } = props;
 
-    initializeHubspotForms({
-      hsFormSuccess,
-      hsFormNewsletter,
-    });
+    // initializeHubspotForms({
+    //   hsFormSuccess,
+    //   hsFormNewsletter,
+    // });
 
     const panelEl = document.querySelector(targetPanel) as HTMLDivElement;
     const stateContainerEl = document.querySelector(
