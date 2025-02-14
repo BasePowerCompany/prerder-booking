@@ -170,6 +170,18 @@
     align-items: center;
     gap: 8px;
     width: 100%;
+    position: relative;
+
+    :global(.pac-container) {
+      position: absolute !important;
+      left: -8px !important;
+      right: -8px !important;
+      width: calc(100% + 16px) !important;
+      margin: 12px 0 0 0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-sizing: border-box;
+      transform: none !important;
+    }
 
     @media screen and (max-width: 768px) {
       flex-direction: column;
@@ -190,16 +202,18 @@
     height: 64px;
     display: flex;
     align-items: center;
+    
+    position: relative;
 
-    @media screen and (max-width: 768px) {
-      height: auto;
-      padding: 4px;
-      flex-direction: column;
-      gap: 12px;
-      background: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      border: none;
+    :global(.pac-container) {
+      position: absolute !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      margin: 8px 0 0 0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-sizing: border-box;
+      transform: none !important;
     }
   }
 
@@ -213,6 +227,9 @@
     z-index: 552;
     background: transparent !important;
     flex: 1;
+    overflow: visible;
+    white-space: nowrap;
+    width: 100%;
     
     &.focused {
       outline: none;
@@ -232,10 +249,14 @@
       filter: brightness(0) invert(1);
     }
 
+    :global(.pac-container) {
+      display: none;
+    }
+
     @media screen and (max-width: 768px) {
       width: 100%;
       height: 48px;
-      padding: 0 12px;
+      padding: 4px;
       background: rgba(255, 255, 255, 0.25) !important;
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
@@ -259,6 +280,8 @@
     appearance: none !important;
     mix-blend-mode: normal !important;
     isolation: isolate !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
     
     &::placeholder {
       color: #FFF !important;
@@ -277,8 +300,6 @@
 
   :global(.pac-container) {
     z-index: 553 !important;
-    position: relative;
-    margin-top: 8px !important;
     background: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -286,6 +307,7 @@
     border-radius: 12px;
     box-shadow: none;
     padding: 8px 4px;
+    overflow: visible !important;
   }
 
   :global(.pac-item) {
